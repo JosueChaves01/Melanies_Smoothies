@@ -7,16 +7,20 @@ from snowflake.snowpark.functions import col
 # Write directly to the app
 st.title(f"Customise your Smoothie! :balloon:")
 st.write(
-  """Choose the fruits you want on your Smoothie!
-  """
-)
+  """Choose the fruits you want on your Smoothie!""")
 
 name_order = st.text_input('Name on Smoothie:')
 st.write('The name on your Smoothie will be:', name_order)
 
 cnx = st.connection("snowflake")
+
 session = cnx.session()
+
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
+
+pd_df = my_dataframe.to_pandas()
+st.dataframe(pd_df)
+st.stop
 
 ingredients_list = st.multiselect(
     'Choose up to 5 ingredients:'
